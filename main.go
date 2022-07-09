@@ -9,17 +9,22 @@ import (
 	"runtime"
 	"syscall"
 
-	"github.com/ssup2/golang-pprof-example/pkg/block"
-	"github.com/ssup2/golang-pprof-example/pkg/cpu"
-	"github.com/ssup2/golang-pprof-example/pkg/memory"
-	"github.com/ssup2/golang-pprof-example/pkg/mutex"
-	"github.com/ssup2/golang-pprof-example/pkg/threadcreate"
+	"github.com/google/gops/agent"
+	"github.com/ssup2/golang-profiling-example/pkg/block"
+	"github.com/ssup2/golang-profiling-example/pkg/cpu"
+	"github.com/ssup2/golang-profiling-example/pkg/memory"
+	"github.com/ssup2/golang-profiling-example/pkg/mutex"
+	"github.com/ssup2/golang-profiling-example/pkg/threadcreate"
 )
 
 func main() {
 	// Run HTTP server to expose profile endpoint
 	go func() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
+
+	go func() {
+		agent.Listen(agent.Options{})
 	}()
 
 	// Set profile rate
